@@ -13,7 +13,7 @@ class DataReceiver:
             'slug': cryptocurrencies,
             'convert': 'USD'
             }
-        with open('Data\\authentication.txt') as json_file:
+        with open('D:\Temp\JiBADProject\Data\\authentication.txt') as json_file:
             self.headers = json.load(json_file)
 
     def prepare_session(self):

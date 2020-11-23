@@ -1,6 +1,7 @@
-import data_receiver
-#import paho.mqtt.client as mqtt
-import paho.mqtt.publish as publish
+from DataReciver import data_receiver
+from paho.mqtt import publish
+import time
+
 
 class MessagesCreator:
     """Class that preprocess data for further objects"""
@@ -9,9 +10,8 @@ class MessagesCreator:
         """Simple initializer"""
         self.data_receiver = data_receiver.DataReceiver()
         self.data_receiver.prepare_session()
-        #self.client = mqtt.Client()
-        #self.client.connect(host="localhost")
-        #self.client.loop_start()
+
+
 
     def get_data(self):
         """Method to get data from API to preprocess"""
@@ -31,19 +31,19 @@ class MessagesCreator:
             'symbol': cryptocurrency['symbol'],
             'cmc_rank': cryptocurrency['cmc_rank'],
             'is_fiat': cryptocurrency['is_fiat'],
-            'prince_USD': cryptocurrency['quote']['USD']['price'],
+            'price_USD': cryptocurrency['quote']['USD']['price'],
             'percent_change_1h': cryptocurrency['quote']['USD']['percent_change_1h'],
             'percent_change_24h': cryptocurrency['quote']['USD']['percent_change_24h'],
             'percent_change_7d': cryptocurrency['quote']['USD']['percent_change_7d']
         }
         return result_dict
 
-    def messages_constructor(self, dict):
+    def messages_constructor(self, dictionary):
         """Messages constructor form dictionary"""
         messages = []
-        topic = dict['symbol'] + '/'
-        for key in dict.keys():
-            temp_tuple = (topic + key, dict[key], 0)
+        topic = dictionary['symbol'] + '/'
+        for key in dictionary.keys():
+            temp_tuple = (topic + key, dictionary[key], 0)
             messages.append(temp_tuple)
         return messages
 
@@ -51,11 +51,22 @@ class MessagesCreator:
         """Method that collects data prepare messages and publish them to mqtt server"""
         data = self.get_data()
         messages = []
+        messages.append(('all/timestamp', data[1].split(sep='.')[0].replace('T', " "), 1))
         for crypto in data[0]:
              messages_temp = self.messages_constructor(self.data_extractor(crypto))
              for message in messages_temp:
                  messages.append(message)
 
-        messages.append(('all/timestamp', data[1], 1))
-
         publish.multiple(messages)
+
+    def start_loop(self, interval=300):
+        """Endless loop for data gathering"""
+        while True:
+            tic = time.time()
+            self.publish()
+            print("Sending messages ")
+            toc = time.time()
+            while (toc-tic) <= interval:
+                time.sleep(5)
+                toc = time.time()
+
