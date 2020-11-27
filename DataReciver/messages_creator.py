@@ -38,12 +38,15 @@ class MessagesCreator:
         }
         return result_dict
 
-    def messages_constructor(self, dictionary):
+    def messages_constructor(self, dictionary, clear=False):
         """Messages constructor form dictionary"""
         messages = []
         topic = dictionary['symbol'] + '/'
         for key in dictionary.keys():
-            temp_tuple = (topic + key, dictionary[key], 0)
+            if clear:
+                temp_tuple = (topic + key, None, 2)
+            else:
+                temp_tuple = (topic + key, dictionary[key], 2)
             messages.append(temp_tuple)
         return messages
 
@@ -51,11 +54,19 @@ class MessagesCreator:
         """Method that collects data prepare messages and publish them to mqtt server"""
         data = self.get_data()
         messages = []
-        messages.append(('all/timestamp', data[1].split(sep='.')[0].replace('T', " "), 1))
+        messages.append(('all/timestamp', None, 2))
         for crypto in data[0]:
-             messages_temp = self.messages_constructor(self.data_extractor(crypto))
+             messages_temp = self.messages_constructor(self.data_extractor(crypto), True)
              for message in messages_temp:
                  messages.append(message)
+
+        publish.multiple(messages)
+        messages = []
+        messages.append(('all/timestamp', data[1].split(sep='.')[0].replace('T', " "), 2, retain=True))
+        for crypto in data[0]:
+            messages_temp = self.messages_constructor(self.data_extractor(crypto))
+            for message in messages_temp:
+                messages.append(message)
 
         publish.multiple(messages)
 
@@ -63,6 +74,7 @@ class MessagesCreator:
         """Endless loop for data gathering"""
         while True:
             tic = time.time()
+
             self.publish()
             print("Sending messages ")
             toc = time.time()

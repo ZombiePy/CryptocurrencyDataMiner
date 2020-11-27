@@ -1,14 +1,11 @@
-from DataGathering import mqtt_client
-from DataGathering import data_passer
-import time
+from DataGathering import csv_data_parser
 
-client = mqtt_client.MqttClient()
-data_passer = data_passer.DataPasser()
+
+data_passer = csv_data_parser.CsvDataParser('BTC')
 
 def on_message_func(client, userdata, msg):
     print("Received msg")
     data_passer.add_message(msg.topic, msg.payload)
 
 
-client.client.on_message = on_message_func
-client.start_loop()
+data_passer.run(on_message_func)
