@@ -13,6 +13,3 @@ class DataParser:
                             'percent_change_24h',
                             'percent_change_7d',
                             'timestamp']
-
-
-
