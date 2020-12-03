@@ -59,7 +59,7 @@ class MessagesCreator:
 
         publish.multiple(messages)
 
-    def start_loop(self, interval=300):
+    def start_loop(self, interval=600):
         """Endless loop for data gathering"""
         while True:
             tic = time.time()

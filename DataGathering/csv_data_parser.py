@@ -1,6 +1,8 @@
 from DataGathering.mqtt_client import MqttClient
 import pandas as pd
 import time
+from pathlib import Path
+import os
 
 
 def on_connect(client, userdata, flags, rc):
@@ -13,6 +15,7 @@ class CsvDataParser:
         self.crypto = crypto
         self.row_list = []
         self.mqtt_client = MqttClient(crypto, host_name)
+        self.host_name = host_name
         self.temp_value_holder = {}
         self.current_time = (0, 0, 0)
 
@@ -56,7 +59,7 @@ class CsvDataParser:
 
     def day_close(self):
         self.mqtt_client.client.loop_stop()
-        self.mqtt_client.client.reinitialise()
+        self.mqtt_client.client.reinitialise(self.host_name, True)
         time.sleep(5)
         self.mqtt_client.loop_start()
         self.row_list = []
@@ -64,6 +67,14 @@ class CsvDataParser:
 
     def to_csv(self, date):
         print("Saving Data")
+        file_name = self.crypto + '_' + date + '.csv'
+        absolute_path = 'D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv'
         data_frame = pd.DataFrame(self.row_list)
-        data_frame.to_csv('D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv')
+        #data_frame.to_csv('D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv')
+        if not os.path.isfile(absolute_path):
+            data_frame.to_csv(absolute_path)
+        else:  # else it exists so append without writing the header
+            data_frame.to_csv(absolute_path, mode='a', header=False)
+            self.row_list = []
+
 
