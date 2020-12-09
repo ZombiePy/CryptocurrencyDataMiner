@@ -11,13 +11,14 @@ def on_connect(client, userdata, flags, rc):
 
 class CsvDataParser:
 
-    def __init__(self, crypto, host_name):
+    def __init__(self, crypto, host_name, output_file_path):
         self.crypto = crypto
         self.row_list = []
         self.mqtt_client = MqttClient(crypto, host_name)
         self.host_name = host_name
         self.temp_value_holder = {}
         self.current_time = (0, 0, 0)
+        self.output_file_path = output_file_path
 
     def add_message(self, topic, payload):
         key = topic.split('/')[1].lower()
@@ -30,11 +31,13 @@ class CsvDataParser:
             self.row_list.append(self.temp_value_holder)
             timestamp = self.temp_value_holder['timestamp']
             date, current_time = self.timestamp_processing(timestamp, True)
-            self.to_csv(date)
+            self.to_csv(date, self.output_file_path)
             if current_time[0] >= 23 and current_time[1] >= 55:
-                self.day_close()
+                end_loop = self.day_close()
+            else:
+                end_loop = False
             self.temp_value_holder = {}
-            return True
+            return end_loop
         else:
             return False
 
@@ -42,9 +45,10 @@ class CsvDataParser:
         self.mqtt_client.set_on_connect(on_connect)
         self.mqtt_client.set_on_message(func)
         self.mqtt_client.loop_start()
-        while True:
+        end_loop = False
+        while not end_loop:
             time.sleep(20)
-            self.check_if_full()
+            end_loop = self.check_if_full()
             self.mqtt_client.client.loop()
 
     def timestamp_processing(self, timestamp, to_print=False):
@@ -59,16 +63,16 @@ class CsvDataParser:
 
     def day_close(self):
         self.mqtt_client.client.loop_stop()
-        self.mqtt_client.client.reinitialise(self.host_name, True)
-        time.sleep(5)
-        self.mqtt_client.loop_start()
-        self.row_list = []
+        #self.mqtt_client.client.reinitialise(self.host_name, True)
+        #time.sleep(5)
+        #self.mqtt_client.loop_start()
+        #self.row_list = []
         return True
 
-    def to_csv(self, date):
+    def to_csv(self, date, output_file_path):
         print("Saving Data")
         file_name = self.crypto + '_' + date + '.csv'
-        absolute_path = 'D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv'
+        absolute_path = os.path.join(output_file_path, 'Output',  file_name)
         data_frame = pd.DataFrame(self.row_list)
         #data_frame.to_csv('D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv')
         if not os.path.isfile(absolute_path):

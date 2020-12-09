@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 class DataReceiver:
     """Class for collecting data from API (CoinMarketCap API)"""
@@ -7,13 +8,15 @@ class DataReceiver:
 
     URL_CHECK_TOKENS = 'https://pro-api.coinmarketcap.com/v1/key/info'
 
+    AUTHENTICATION_PATH = os.path.join(os.getcwd(), 'Data', 'authentication.txt')
+
     def __init__(self, cryptocurrencies="bitcoin,ethereum,litecoin,xrp"):
         """Default initializer to get data about cryptocurrencies, default bitcoin, ethereum, litecoin, xrp"""
         self.parameters = {
             'slug': cryptocurrencies,
             'convert': 'USD'
             }
-        with open('D:\Temp\JiBADProject\Data\\authentication.txt') as json_file:
+        with open(self.AUTHENTICATION_PATH) as json_file:
             self.headers = json.load(json_file)
 
     def prepare_session(self):

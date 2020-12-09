@@ -1,8 +1,9 @@
 from DataGathering import csv_data_parser
+import os
 
+output_file_path = os.getcwd()
 
-data_passer = csv_data_parser.CsvDataParser('BTC', 'BTC1')
-
+data_passer = csv_data_parser.CsvDataParser('BTC', 'BTC1', os.getcwd())
 
 
 def on_message_func(client, userdata, msg):

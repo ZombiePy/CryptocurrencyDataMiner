@@ -1,7 +1,9 @@
 from DataGathering import csv_data_parser
+import os
 
 
-data_passer = csv_data_parser.CsvDataParser('LTC', 'LTC1')
+output_file_path = os.getcwd()
+data_passer = csv_data_parser.CsvDataParser('LTC', 'LTC1', output_file_path)
 
 
 
