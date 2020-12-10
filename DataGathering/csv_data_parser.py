@@ -32,7 +32,7 @@ class CsvDataParser:
             timestamp = self.temp_value_holder['timestamp']
             date, current_time = self.timestamp_processing(timestamp, True)
             self.to_csv(date, self.output_file_path)
-            if current_time[0] >= 23 and current_time[1] >= 55:
+            if current_time[0] >= 23 and current_time[1] >= 50:
                 end_loop = self.day_close()
             else:
                 end_loop = False
