@@ -1,7 +1,6 @@
 from DataGathering.mqtt_client import MqttClient
 import pandas as pd
 import time
-from pathlib import Path
 import os
 
 
@@ -35,7 +34,7 @@ class CsvDataParser:
             if current_time[0] >= 23 and current_time[1] >= 50:
                 end_loop = self.day_close()
             else:
-                end_loop = False
+                end_loop = True
             self.temp_value_holder = {}
             return end_loop
         else:
@@ -47,9 +46,10 @@ class CsvDataParser:
         self.mqtt_client.loop_start()
         end_loop = False
         while not end_loop:
-            time.sleep(20)
+            time.sleep(5)
             end_loop = self.check_if_full()
             self.mqtt_client.client.loop()
+        self.mqtt_client.client.loop_stop()
 
     def timestamp_processing(self, timestamp, to_print=False):
         date, current_time = timestamp.split()

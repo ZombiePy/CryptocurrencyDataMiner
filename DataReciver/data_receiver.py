@@ -10,11 +10,16 @@ class DataReceiver:
 
     AUTHENTICATION_PATH = os.path.join(os.getcwd(), 'Data', 'authentication.txt')
 
-    def __init__(self, cryptocurrencies="bitcoin,ethereum,litecoin,xrp"):
-        """Default initializer to get data about cryptocurrencies, default bitcoin, ethereum, litecoin, xrp"""
+    def __init__(self, cryptocurrencies="bitcoin,ethereum,litecoin,xrp", convert='USD'):
+        """
+        Default initializer to get data about cryptocurrencies, default bitcoin, ethereum, litecoin, xrp
+        :parameter convert - currency that API convert prices
+        :parameter cryptocurrencies - string contains cryptocurrencies separated by comma, DateReceiver will download
+        data about this currencies
+        """
         self.parameters = {
             'slug': cryptocurrencies,
-            'convert': 'USD'
+            'convert': convert
             }
         with open(self.AUTHENTICATION_PATH) as json_file:
             self.headers = json.load(json_file)
@@ -31,16 +36,19 @@ class DataReceiver:
             data = json.loads(response.text)
             return data
         except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects) as e:
-            print(e)
+            print('Fail to connect with API')
 
-    def request_left(self, return_type='left'):
-        """Method that check if program has API requests left or how many of them used"""
+    def request_counter(self, return_type='left'):
+        """
+        Method that check if program has API requests left or how many of them used
+        :parameter return_type - one of ['left', 'used'] define what user will expects
+        :rtype: int
+        """
         try:
             response = self.session.get(self.URL_CHECK_TOKENS)
             data = json.loads(response.text)
-        except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects) as e:
-            print(e)
-        try:
             return data['data']['usage']['current_day']['credits_' + return_type]
+        except (requests.ConnectionError, requests.Timeout, requests.TooManyRedirects):
+            print('Fail to connect with API')
         except KeyError:
-            raise KeyError("return_type must be defined as 'left' or 'used")
+            print("return_type must be defined as 'left' or 'used")

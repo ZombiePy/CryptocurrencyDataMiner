@@ -1,8 +1,11 @@
 from DataReciver import messages_creator
+import sys
 import time
 
-test = messages_creator.MessagesCreator()
+msgCreator = messages_creator.MessagesCreator()
 
-time.sleep(5)
+msgCreator.sleep(1)
 
-test.start_loop()
+msgCreator.publish()
+
+sys.exit()
