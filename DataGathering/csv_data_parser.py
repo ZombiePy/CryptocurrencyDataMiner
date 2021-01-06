@@ -40,15 +40,17 @@ class CsvDataParser:
         else:
             return False
 
-    def run(self, func):
+    def run(self, func, max_time=60):
         self.mqtt_client.set_on_connect(on_connect)
         self.mqtt_client.set_on_message(func)
         self.mqtt_client.loop_start()
         end_loop = False
-        while not end_loop:
+        current_time = 0
+        while not end_loop and current_time <= max_time:
             time.sleep(5)
             end_loop = self.check_if_full()
             self.mqtt_client.client.loop()
+            current_time += 5
         self.mqtt_client.client.loop_stop()
 
     def timestamp_processing(self, timestamp, to_print=False):

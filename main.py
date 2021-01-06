@@ -4,7 +4,7 @@ import time
 
 msgCreator = messages_creator.MessagesCreator()
 
-msgCreator.sleep(1)
+time.sleep(10)
 
 msgCreator.publish()
 
