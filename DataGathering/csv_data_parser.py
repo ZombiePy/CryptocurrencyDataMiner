@@ -4,10 +4,6 @@ import time
 import os
 
 
-def on_connect(client, userdata, flags, rc):
-    print("Connected")
-
-
 class CsvDataParser:
 
     def __init__(self, crypto, host_name, output_file_path):
@@ -31,17 +27,12 @@ class CsvDataParser:
             timestamp = self.temp_value_holder['timestamp']
             date, current_time = self.timestamp_processing(timestamp, True)
             self.to_csv(date, self.output_file_path)
-            if current_time[0] >= 23 and current_time[1] >= 50:
-                end_loop = self.day_close()
-            else:
-                end_loop = True
             self.temp_value_holder = {}
-            return end_loop
+            return True
         else:
             return False
 
     def run(self, func, max_time=60):
-        self.mqtt_client.set_on_connect(on_connect)
         self.mqtt_client.set_on_message(func)
         self.mqtt_client.loop_start()
         end_loop = False
@@ -63,20 +54,10 @@ class CsvDataParser:
             print(self.current_time)
         return date, current_time
 
-    def day_close(self):
-        self.mqtt_client.client.loop_stop()
-        #self.mqtt_client.client.reinitialise(self.host_name, True)
-        #time.sleep(5)
-        #self.mqtt_client.loop_start()
-        #self.row_list = []
-        return True
-
     def to_csv(self, date, output_file_path):
-        print("Saving Data")
         file_name = self.crypto + '_' + date + '.csv'
         absolute_path = os.path.join(output_file_path, 'Output',  file_name)
         data_frame = pd.DataFrame(self.row_list)
-        #data_frame.to_csv('D:\Temp\JiBADProject\Data\Output\\' + self.crypto + '_' + date + '.csv')
         if not os.path.isfile(absolute_path):
             data_frame.to_csv(absolute_path)
         else:  # else it exists so append without writing the header
