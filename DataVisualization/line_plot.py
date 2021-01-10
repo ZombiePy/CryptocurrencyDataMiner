@@ -27,6 +27,7 @@ def plot_line(df, crypto):
 
 
 if __name__ == "__main__":
+    #
     cryptos = ['BTC', 'LTC', 'ETH', 'XRP']
     for crypto in cryptos:
         df_crypto = get_one_date_dataframe(crypto, func.get_last_date())

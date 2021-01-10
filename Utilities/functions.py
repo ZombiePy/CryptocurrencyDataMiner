@@ -58,4 +58,14 @@ def get_last_date():
 
 def get_plot_path(date, plot_type, crypto):
     file_name = crypto.upper() + '_' + plot_type + '_' + date + '.png'
-    return os.path.join(get_output_path('Plot'), file_name)
+    return os.path.join(get_output_path('Plots'), file_name)
+
+
+def list_to_html_table(list_of_data):
+    table_content = ""
+    for sublist in list_of_data:
+        table_content += "<tr>\n"
+        for data in sublist:
+            table_content += "<td>" + str(data) + "</td>\n"
+        table_content += "</tr>\n"
+    return table_content[:-1]
