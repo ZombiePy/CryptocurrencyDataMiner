@@ -1,5 +1,6 @@
 import os
 import getpass
+import sys
 
 
 print('Welcome to Crypto Project installation guide.')
@@ -58,3 +59,10 @@ print('Authentication file for api created... 4/4')
 
 print('Installing needed libraries...')
 os.system('pip3 install -r requirements.txt')
+
+print('Now copy content of Resources/add_to_cron.txt file to your crontab.')
+input("If you finished press enter.")
+
+print('')
+print('Installation complete')
+sys.exit()
