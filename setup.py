@@ -44,7 +44,7 @@ print('Adding your address to subscribers list...')
 os.system("echo '{email},{name}' >> Data/Input/subscribers.csv".format(name=name, email=email))
 
 authentication_email_form = '{"user": "{email}","password":"{password}"}'
-authentication_email_form_personalized = authentication_email_form.format(email=email, password=password)
+authentication_email_form_personalized = authentication_email_form.format(user=email, password=password)
 os.system("echo '{}' >> Data/Input/authentication_email.json".format(authentication_email_form_personalized))
 print('Authentication file for email created... 2/4')
 
