@@ -43,8 +43,8 @@ while authentication:
 print('Adding your address to subscribers list...')
 os.system("echo '{email},{name}' >> Data/Input/subscribers.csv".format(name=name, email=email))
 
-authentication_email_form = '{"user": "{email}","password":"{password}"}'
-authentication_email_form_personalized = authentication_email_form.format(user=email, password=password)
+authentication_email_form = '{"user": "{user}","password":"{password}"}'
+authentication_email_form_personalized = authentication_email_form.replace('{user}', email).replace('{password}', password)
 os.system("echo '{}' >> Data/Input/authentication_email.json".format(authentication_email_form_personalized))
 print('Authentication file for email created... 2/4')
 
@@ -54,7 +54,7 @@ print('Email form created...                    3/4')
 authentication_cmc_form = '{"Accepts": "application/json","X-CMC_PRO_API_KEY": "{}"}'
 cmc_key = input("Coin Marker Cap api key: ")
 authentication_cmc_form_personalized = authentication_cmc_form.format(cmc_key)
-os.system("echo '{}' >> Data/Input/authentication.json".format(authentication_cmc_form_personalized))
+os.system("echo '{}' >> Data/Input/authentication.json".replace('{}', cmc_key))
 print('Authentication file for api created... 4/4')
 
 print('Installing needed libraries...')
