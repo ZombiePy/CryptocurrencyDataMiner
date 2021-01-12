@@ -2,6 +2,5 @@ requests
 paho-mqtt
 pandas
 matplotlib
-time
-os
 yagmail
+mpl_finance

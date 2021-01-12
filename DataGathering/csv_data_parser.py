@@ -56,7 +56,7 @@ class CsvDataParser:
 
     def to_csv(self, date, output_file_path):
         file_name = self.crypto + '_' + date + '.csv'
-        absolute_path = os.path.join(output_file_path, 'Output',  file_name)
+        absolute_path = os.path.join(output_file_path,  file_name)
         data_frame = pd.DataFrame(self.row_list)
         if not os.path.isfile(absolute_path):
             data_frame.to_csv(absolute_path)
