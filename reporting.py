@@ -4,14 +4,17 @@ import os
 import yagmail
 import pandas as pd
 import json
+import time
 
 
 cryptos = ['BTC', 'LTC', 'ETH', 'XRP']
 last_day = func.get_last_date()
 
-os.system('python3 ./DataVisualization/candle_stick.py &')
-os.system('python3 ./DataVisualization/line_plot.py &')
-os.system('python3 ./EmailOrganizer/email_organizer.py &')
+os.system('python3 ./candle_stick.py &')
+os.system('python3 ./line_plot.py &')
+os.system('python3 ./email_organizer.py &')
+
+time.sleep(60)
 
 table = list()
 for crypto in cryptos:
@@ -25,7 +28,7 @@ for crypto in cryptos:
     table.append(temp_list)
 
 
-email_form_path = os.path.join(os.getcwd(), 'Data', 'Input', 'Resources/email_form.txt')
+email_form_path = os.path.join(os.getcwd(), 'Data', 'Input', 'email_form.txt')
 with open(email_form_path, 'r') as email_file:
     email_form = email_file.read()
 

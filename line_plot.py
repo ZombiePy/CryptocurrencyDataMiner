@@ -9,7 +9,7 @@ def plot_line(df, crypto):
     df['timestamp'] = list(date.split()[1] for date in df['timestamp'])
     ax = plt.subplot()
     ax.plot_date(df['timestamp'], df['price_usd'], xdate=True, fmt='-w')
-    plt.xticks(df['timestamp'].iloc[::6], rotation=90)
+    plt.xticks(df['timestamp'].iloc[::12], rotation=90)
     ax.set_facecolor('black')
     ax.figure.set_facecolor('#121212')
     ax.tick_params(axis='x', colors='white')
