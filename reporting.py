@@ -19,7 +19,7 @@ time.sleep(60)
 table = list()
 for crypto in cryptos:
     df_daily = get_daily_dataframe(crypto)
-    df_daily = df_daily[df_daily['Date']==last_day]
+    df_daily = df_daily[df_daily['Date'] == last_day]
     temp_list = [crypto,
                  round(df_daily['Low'].values[0], 2),
                  round(df_daily['High'].values[0], 2),

@@ -5,7 +5,7 @@ import sys
 import Utilities.functions as func
 
 
-credentials_path = os.path.join('', 'Data', 'Input', 'authentication_email.txt')
+credentials_path = os.path.join(os.getcwd(), 'Data', 'Input', 'authentication_email.json')
 with open(credentials_path) as json_file:
     credentials = json.load(json_file)
 

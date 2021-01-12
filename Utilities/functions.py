@@ -64,10 +64,10 @@ def get_plot_path(date, plot_type, crypto):
 def list_to_html_table(list_of_data):
     table_content = ""
     for sublist in list_of_data:
-        table_content += "<tr>\n"
+        table_content += "    <tr>\n"
         for data in sublist:
-            table_content += "<td>" + str(data) + "</td>\n"
-        table_content += "</tr>\n"
+            table_content += "        <td>" + str(data) + "</td>\n"
+        table_content += "    </tr>\n"
     return table_content[:-1]
 
 

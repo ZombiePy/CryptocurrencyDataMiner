@@ -5,10 +5,13 @@ from Utilities.functions_dataframe import get_daily_dataframe
 import Utilities.functions as func
 import os
 
+
 def plot_candle_stick(df, crypto):
     df = df[['Open', 'High', 'Low', 'Close']]
     df.reset_index(inplace=True)
-    df['Date'] = df['Date'].map(mdates.date2num)
+    dates_num = mdates.date2num(df['Date'])
+    df['Date'] = dates_num
+    #df['Date'] = df['Date'].map(mdates.date2num)
     date = func.get_last_date()
 
     ax = plt.subplot()
@@ -21,6 +24,7 @@ def plot_candle_stick(df, crypto):
     ax.tick_params(axis='y', colors='white')
     ax.xaxis_date()
     ax.grid(True)
+    plt.tight_layout()
     plt.xticks(rotation=45)
     #plt.tight_layout()
     plots_path = func.get_output_path('Plots')
@@ -28,6 +32,7 @@ def plot_candle_stick(df, crypto):
     absolute_path = os.path.join(plots_path, fig_name)
     plt.savefig(absolute_path, format='png', dpi=800)
     #plt.show()
+    plt.clf()
     return absolute_path
 
 
