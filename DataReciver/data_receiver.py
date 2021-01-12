@@ -8,7 +8,7 @@ class DataReceiver:
 
     URL_CHECK_TOKENS = 'https://pro-api.coinmarketcap.com/v1/key/info'
 
-    AUTHENTICATION_PATH = os.path.join(os.getcwd(), 'Data', 'authentication.txt')
+    AUTHENTICATION_PATH = os.path.join(os.getcwd(), 'Data', 'authentication.json')
 
     def __init__(self, cryptocurrencies="bitcoin,ethereum,litecoin,xrp", convert='USD'):
         """

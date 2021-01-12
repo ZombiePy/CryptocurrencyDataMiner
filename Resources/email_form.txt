@@ -1,0 +1,22 @@
+<h1> Hello {name}! </h1>
+<p>Here is Your daily Cryptocurrency report.
+Results form last day: {date}</p>
+
+<table border="1">
+<thread>
+<tr>
+<th>Cryptocurrency</th>
+<th>Low</th>
+<th>High</th>
+<th>Open</th>
+<th>Close</th>
+</tr>
+</thread>
+<tbody>
+rest_of_table
+</tbody>
+</table>
+
+
+<p>Your graphs are in attachments.
+</p>

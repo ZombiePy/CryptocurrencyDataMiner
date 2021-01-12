@@ -1,0 +1,3 @@
+*/5 * * * * (cd {localpath}; python3 mqtt_recivers.py &)
+*/5 * * * * (cd {localpath}; python3 data_getter.py &)
+56 0 * * * (cd {localpath}; python3 reporting.py &)

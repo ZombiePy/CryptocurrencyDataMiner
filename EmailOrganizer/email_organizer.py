@@ -1,6 +1,8 @@
-import imaplib, email
+import imaplib
 import json
 import os
+import sys
+import Utilities.functions as func
 
 
 credentials_path = os.path.join('..', 'Data', 'Input', 'authentication_email.txt')
@@ -42,13 +44,22 @@ for msg_id in msgs_id.split():
                 index_end = data_beginning.find("Type:")
 
                 info = data_beginning[0: index_end+12]
-                print(info)
 
             except UnicodeEncodeError as e:
                 pass
 
-    instruction = info[index_end+5:]
-    instruction = instruction.replace(" ", "")
-    print(instruction)
+    info_list = info.split()
+    if len(info_list) == 6:
+        if info_list[-1] == 'Add':
+            func.add_subscriber(info_list[3], info_list[1])
+        elif info_list[-1] == 'Remove':
+            func.remove_subscriber(info_list[3], info_list[1])
+        else:
+            print('Command not found')
 
-#con.store(msgs_id, '+FLAGS', r'(\Deleted)')
+    con.store(msg_id, '+FLAGS', r'(\Deleted)')
+
+con.close()
+con.logout()
+
+sys.exit()

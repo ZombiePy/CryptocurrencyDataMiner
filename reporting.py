@@ -9,8 +9,9 @@ import json
 cryptos = ['BTC', 'LTC', 'ETH', 'XRP']
 last_day = func.get_last_date()
 
-os.system('python ./DataVisualization/candle_stick.py &')
-os.system('python ./DataVisualization/line_plot.py &')
+os.system('python3 ./DataVisualization/candle_stick.py &')
+os.system('python3 ./DataVisualization/line_plot.py &')
+os.system('python3 ./EmailOrganizer/email_organizer.py &')
 
 table = list()
 for crypto in cryptos:
@@ -24,7 +25,7 @@ for crypto in cryptos:
     table.append(temp_list)
 
 
-email_form_path = os.path.join(os.getcwd(), 'Data', 'Input', 'email_form.txt')
+email_form_path = os.path.join(os.getcwd(), 'Data', 'Input', 'Resources/email_form.txt')
 with open(email_form_path, 'r') as email_file:
     email_form = email_file.read()
 
@@ -41,22 +42,22 @@ attachments = [
     func.get_plot_path(last_day, 'line_plot', 'ltc'),
     func.get_plot_path(last_day, 'candle_stick', 'ltc')
 ]
-credentials_path = os.path.join(os.getcwd(), 'Data', 'Input', 'authentication_email.txt')
+credentials_path = os.path.join(os.getcwd(), 'Data', 'Input', 'authentication_email.json')
 with open(credentials_path) as json_file:
     credentials = json.load(json_file)
 
 subscribers = pd.read_csv(os.path.join(os.getcwd(), 'Data', 'Input', 'subscribers.csv'))
+subscribers = subscribers.drop_duplicates()
 
 for _, row in subscribers.iterrows():
     email_form_personalized = email_form.format(name=row['name'], date=last_day)
     #initializing the server connection
-    credentials_path = os.path.join(os.getcwd(), 'Data', 'Input', 'credentials.json')
     yag = yagmail.SMTP(user=credentials['user'], password=credentials['password'])
     #sending the email
-    #yag.send(to=row['email'],
-    #         subject='Daily cryptocurrencies update',
-    #         contents=email_form_personalized,
-    #         attachments=attachments)
+    yag.send(to=row['email'],
+             subject='Daily cryptocurrencies update',
+             contents=email_form_personalized,
+             attachments=attachments)
 
     print("Email sent successfully")
 

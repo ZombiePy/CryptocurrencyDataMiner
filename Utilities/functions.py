@@ -69,3 +69,20 @@ def list_to_html_table(list_of_data):
             table_content += "<td>" + str(data) + "</td>\n"
         table_content += "</tr>\n"
     return table_content[:-1]
+
+
+def add_subscriber(email,name):
+    subscribers_path = os.path.join("..", 'Data', 'Input', 'subscribers.csv')
+    with open(subscribers_path, 'a') as subscribers:
+        subscribers.write('\n' + email + ',' + name)
+
+
+def remove_subscriber(email, name):
+    subscribers_path = os.path.join("..", 'Data', 'Input', 'subscribers.csv')
+    with open(subscribers_path, '') as subscribers:
+        lines = subscribers.readlines()
+        subscribers.seek(0)
+        for line in lines:
+            if line != email + "," + name:
+                subscribers.write(line)
+        subscribers.truncate()
