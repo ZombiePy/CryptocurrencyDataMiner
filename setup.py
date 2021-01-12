@@ -53,8 +53,8 @@ print('Email form created...                    3/4')
 
 authentication_cmc_form = '{"Accepts": "application/json","X-CMC_PRO_API_KEY": "{}"}'
 cmc_key = input("Coin Marker Cap api key: ")
-authentication_cmc_form_personalized = authentication_cmc_form.format(cmc_key)
-os.system("echo '{}' >> Data/Input/authentication.json".replace('{}', cmc_key))
+authentication_cmc_form_personalized = authentication_cmc_form.replace('{}', cmc_key)
+os.system("echo '{}' >> Data/Input/authentication.json".replace('{}', authentication_cmc_form_personalized))
 print('Authentication file for api created... 4/4')
 
 print('Installing needed libraries...')
