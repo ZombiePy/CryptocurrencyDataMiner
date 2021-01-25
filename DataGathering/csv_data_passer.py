@@ -16,10 +16,14 @@ class CsvDataParser:
         self.output_file_path = output_file_path
 
     def add_message(self, topic, payload):
+        """Function that decode received msg and saving it to temp_value_holder
+        :parameter topic - topic of mqtt msg
+        :parameter payload - payload of mqtt msg"""
         key = topic.split('/')[1].lower()
         self.temp_value_holder[key] = payload.decode('utf-8')
 
     def check_if_full(self):
+        """Function that checks if temp_value_holder contains all needed keys"""
         keys = list(self.temp_value_holder.keys())
         if keys == ['timestamp', 'symbol', 'price_usd']:
             print('Full')
@@ -33,6 +37,9 @@ class CsvDataParser:
             return False
 
     def run(self, func, max_time=60):
+        """Run client and listen to mqtt server
+        :parameter func - function that replace on_message client function
+        :parameter max_time - max time that method will run"""
         self.mqtt_client.set_on_message(func)
         self.mqtt_client.loop_start()
         end_loop = False
@@ -45,6 +52,9 @@ class CsvDataParser:
         self.mqtt_client.client.loop_stop()
 
     def timestamp_processing(self, timestamp, to_print=False):
+        """Preprocessing timestamp from API
+        :parameter timestamp - timestamp from API
+        :parameter to_print - True will print current time"""
         date, current_time = timestamp.split()
         hour, minute, sec = current_time.split(':')
         hour, minute, sec = int(hour), int(minute), int(sec)
@@ -55,6 +65,9 @@ class CsvDataParser:
         return date, current_time
 
     def to_csv(self, date, output_file_path):
+        """Saving date into csv file
+        :parameter date - current date
+        :parameter output_file_path - path where file will be stored"""
         file_name = self.crypto + '_' + date + '.csv'
         absolute_path = os.path.join(output_file_path,  file_name)
         data_frame = pd.DataFrame(self.row_list)

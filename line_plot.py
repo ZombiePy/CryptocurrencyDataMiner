@@ -22,7 +22,7 @@ def plot_line(df, crypto):
     fig_name = crypto.upper() + '_line_plot_' + date + '.png'
     absolute_path = os.path.join(plots_path, fig_name)
     plt.savefig(absolute_path, format='png', dpi=800)
-    #plt.show()
+    plt.show()
     plt.clf()
     return absolute_path
 

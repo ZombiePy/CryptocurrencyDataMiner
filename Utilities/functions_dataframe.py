@@ -4,6 +4,9 @@ import Utilities.functions as func
 
 
 def get_one_date_dataframe(crypto, date):
+    """Function that creates pandas dataframe from one date
+    :parameter crypto - chose data about that currency
+    :parameter date """
     dates = func.get_dates(crypto)
     if date in dates:
         output_path = func.get_output_path()
@@ -15,6 +18,8 @@ def get_one_date_dataframe(crypto, date):
 
 
 def get_full_crypto_dataframe(crypto):
+    """Function that creates pandas dataframe from whole gathered data
+        :parameter crypto - chose data about that currency"""
     file_names = func.get_prices_files(crypto)
     output_path = func.get_output_path()
 
@@ -30,6 +35,8 @@ def get_full_crypto_dataframe(crypto):
 
 
 def get_daily_dataframe(crypto):
+    """Function that creates pandas dataframe with data preprocessed for candle stick plot
+        :parameter crypto - chose data about that currency"""
     temp_dict = {'Low': [],
             'High': list(),
             'Open': list(),

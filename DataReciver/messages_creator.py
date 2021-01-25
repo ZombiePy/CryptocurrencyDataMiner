@@ -39,7 +39,11 @@ class MessagesCreator:
         return result_dict
 
     def messages_constructor(self, dictionary):
-        """Messages constructor form dictionary"""
+        """Messages constructor form dictionary
+        Set key as msg topic and value as payload
+        Default QoS is set to 2 for MQTT protocol
+        :parameter dictionary - dict that contain key-values pair for messages
+        :rtype list of tuples"""
         messages = []
         topic = dictionary['symbol'] + '/'
         for key in dictionary.keys():
@@ -60,7 +64,8 @@ class MessagesCreator:
         publish.multiple(messages)
 
     def start_loop(self, interval=600):
-        """Endless loop for data gathering"""
+        """Endless loop for data gathering
+        :parameter interval - """
         while True:
             tic = time.time()
 
